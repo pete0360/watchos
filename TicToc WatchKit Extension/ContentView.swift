@@ -11,6 +11,7 @@ import Combine
 struct ContentView: View {
   
     @State private var count = 0
+  private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
   
     var body: some View {
       VStack(alignment: .center, spacing: 8) {
@@ -18,6 +19,9 @@ struct ContentView: View {
           .font(.system(size: 90))
           .fontWeight(.black)
           .multilineTextAlignment(.center)
+          .onReceive(timer) { time in
+            print("\(time)")
+          }
         HStack(alignment: .center, spacing: 8) {
           Button {
             print("Increment")
