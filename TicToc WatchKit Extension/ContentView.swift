@@ -42,6 +42,7 @@ struct ContentView: View {
           Text("Go!")
             .font(.system(size: 34))
         }
+        .disabled(count == 0)
       }
     }
   }
