@@ -11,7 +11,8 @@ import Combine
 struct ContentView: View {
   
   @State private var count = 0
-  private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+  @State private var isRunning = false
+  @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
   
   var body: some View {
     VStack(alignment: .center, spacing: 8) {
@@ -20,18 +21,23 @@ struct ContentView: View {
         .fontWeight(.black)
         .multilineTextAlignment(.center)
         .onReceive(timer) { _ in
+          if count == 0 {
+            timer.upstream.connect().cancel()
+          }
           count = count > 0 ? count - 1 : 0
         }
       HStack(alignment: .center, spacing: 8) {
         Button {
           print("Increment")
+          timer.upstream.connect().cancel()
           count = count + 1
         } label: {
          Image(systemName: "plus")
             .font(.system(size: 34))
         }
         Button {
-          print("Increment")
+          print("Go")
+          timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         } label: {
           Text("Go!")
             .font(.system(size: 34))
